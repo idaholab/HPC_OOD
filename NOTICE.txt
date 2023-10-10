@@ -1,5 +1,5 @@
 ﻿This project contains code from Idaho National Laboratory's HPC program.
-Github URL: https://github.com/idaholab/HPC_OOD_Herd
+Github URL: https://github.com/idaholab/HPC_OOD
 Licensed under MIT
 
 
@@ -33,6 +33,8 @@ OWNED RIGHTS.
 Authors:
 
 Brandon Biggs
+Matthew Sgambati
+Bradlee Rothwell
 
 
 
