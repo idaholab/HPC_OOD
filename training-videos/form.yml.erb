@@ -1,0 +1,73 @@
+# File modified by BEA.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+<%-
+    inl_systems = "/var/www/ood/apps/sys/dashboard/public/video_training/how_to_use_INL_systems/"
+    computing_culture = "/var/www/ood/apps/sys/dashboard/public/video_training/high_performance_computing_culture/"
+    fun_and_theory = "/var/www/ood/apps/sys/dashboard/public/video_training/Fundamentals_and_Theory/"
+
+    inl_systems_videos = Array.new
+    computing_culture_videos = Array.new
+    fun_and_theory_videos = Array.new
+
+    # INL Systems
+    files = Dir.entries(inl_systems)
+    files.each { |file|
+        if file.include? ".mp4"
+            inl_systems_videos.push(file)
+        end
+    }
+    # Computing Culture
+    files = Dir.entries(computing_culture)
+    files.each { |file|
+        if file.include? ".mp4"
+            computing_culture_videos.push(file)
+        end
+    }
+    # Fundamentals and Theory
+    files = Dir.entries(fun_and_theory)
+    files.each { |file|
+        if file.include? ".mp4"
+            fun_and_theory_videos.push(file)
+        end
+    }
+-%>
+---
+title: "HPC Training Videos"
+description: "HPC Training series videos."
+cluster: null
+attributes:
+  inl_systems_video_list: 
+    label: "How to use INL Systems"
+    widget: select
+    options:
+    <%- inl_systems_videos.each do |video| -%>
+      - ["<%= video %>", "/pun/sys/dashboard/video_training/how_to_use_INL_systems/<%= video %>"]
+    <%- end -%>
+
+  # Computing Culture
+  computing_culture_video_list: 
+    label: "Computing Culture"
+    widget: select
+    options:
+    <%- computing_culture_videos.each do |video| -%>
+      - ["<%= video %>", "/pun/sys/dashboard/video_training/high_performance_computing_culture/<%= video %>"]
+    <%- end -%>
+
+  # Fundamentals and Theory
+  fun_and_theory_video_list: 
+    label: "Fundamentals and Theory"
+    widget: select
+    options:
+    <%- fun_and_theory_videos.each do |video| -%>
+      - ["<%= video %>", "/pun/sys/dashboard/video_training/Fundamentals_and_Theory/<%= video %>"]
+    <%- end -%>
+
+  video:
+    widget: hidden_field
+
+form:
+  - inl_systems_video_list
+  - computing_culture_video_list
+  - fun_and_theory_video_list
+  - video
+
