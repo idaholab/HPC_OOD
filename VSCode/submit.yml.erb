@@ -1,0 +1,23 @@
+# File modified by BEA.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+
+---
+batch_connect:
+  template: "vnc"
+script:
+  native:
+    - "-l"
+    <% if advanced_submission == "1" %>
+    - "select=1:ncpus=<%= num_of_cpus.to_i %>:mpiprocs=<%= num_of_cpus.to_i %>"
+    - "-q"
+    - "router@<%= cluster %>"
+    <% else %>
+    - "select=1:ncpus=1:mpiprocs=1"
+    - "-q"
+    - "desktop@<%= cluster %>"
+    <% end %> 
+    - "-P"
+    - <%= pbs_project %>
+    - "-N"
+    - "OOD-<%= cluster %>_vscode_server"
+    

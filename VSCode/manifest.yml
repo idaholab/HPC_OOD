@@ -1,0 +1,12 @@
+# File modified by BEA.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+
+---
+name: Visual Studio Code
+category: Interactive Apps
+subcategory: IDE
+role: batch_connect
+description: |
+  This app will launch [VS Code].
+
+  [VS Code]: https://code.visualstudio.com/

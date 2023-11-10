@@ -1,0 +1,65 @@
+# File modified by BEA.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+
+---
+title: "Visual Studio Code"
+description: |
+  This launches a Visual Studio Code instances in the HPC Enclave.
+attributes:
+  desktop: "xfce"
+  bc_vnc_resolution:
+    required: true
+  cluster:
+    label: Cluster
+    widget: select
+    options:
+      - ["Lemhi", "lemhipbs"]
+      - ["Sawtooth", "sawtoothpbs"]
+    value: "sawtoothpbs"
+    help: Select what cluster you want to run your VS Code on.
+
+  pbs_project:
+    label: PBS Project
+    help: |
+      This is the -P arguement provided to qsub. Example: *ldrd, moose, neams*
+      For a complete list of projects, go to the [pbs page] on hpcweb
+      [pbs page]: http://hpcweb.hpcondemand.inl.gov/home/pbs#specifying-a-project
+
+# https://github.com/OSC/bc_js_filepicker
+  working_dir:
+    label: "Working Directory"
+    data-filepicker: true
+    data-default-directory: "/home/"
+    data-target-file-type: dirs  # Valid values are: files, dirs, or both
+    readonly: false
+    help: "Select your project directory; defaults to $HOME"
+  
+  advanced_submission:
+    label: Show advanced code and input settings
+    widget: check_box
+
+  num_of_cpus:
+    widget: "number_field"
+    label: Cores 
+    min: 1
+    max: 48
+    step: 1
+    value: 1
+    cacheable: false
+    help: |
+      | Cluster  | Max Cores per Node | Max Hours |  
+      |----------|:-----------------: |:---------:|  
+      | Lemhi    | 40                 | 72  |  
+      | Sawtooth | 48                 | 168 |  
+      Please see queues secton on the [cluster queues] for more information.
+      [cluster queues]: http://hpcweb.hpcondemand.inl.gov/home/pbs#Queues
+
+form:
+  - desktop
+  - bc_vnc_resolution
+  - cluster
+  - pbs_project
+  - bc_num_hours
+  - working_dir
+  - advanced_submission
+  - num_of_cpus
