@@ -1,0 +1,44 @@
+# File modified by BEA. Adds substantial capabilities to select different
+#     desktop environments/settings.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+---
+script:
+  native:
+    # Sawtooth
+    <% if cluster == "sawtoothpbs" %>
+    - "-l"
+    - "select=<%= num_of_nodes.to_i %>:ncpus=<%= num_of_gpus.to_i == 0 ? num_of_cpus : num_of_gpus.to_i*12 %>:ngpus=<%= num_of_gpus.to_i %>:mpiprocs=<%= num_of_gpus.to_i == 0 ? num_of_cpus : num_of_gpus.to_i*12 %><%= node_select.blank? ? '': ':host='+node_select.to_s %>"
+    - "-q"
+      <% if job_type == "login" %>
+    - "desktop@<%= cluster %>"
+      <% elsif job_type == "gpu" %>
+    - "gpu@<%= cluster %>"
+      <% else %>
+    - "router@<%= cluster %>"
+      <% end %>
+    - "-P"
+    - "<%= project %>" 
+    - "-N"
+    - "OOD-<%= cluster %>-Desktop"
+
+    # Lemhi config - PBS
+    <% else %>
+    - "-l"
+      <% if ! node_select.blank? %>
+    - "select=<%= num_of_nodes.to_i %>:ncpus=<%= num_of_cpus.to_i %>:mpiprocs=<%= num_of_cpus.to_i %>:host=<%= node_select.blank %>"
+      <% else %>
+    - "select=<%= num_of_nodes.to_i %>:ncpus=<%= num_of_cpus.to_i %>:mpiprocs=<%= num_of_cpus.to_i %>"
+      <% end %>
+    - "-P"
+    - "<%= project %>" 
+    - "-q"
+      <% if job_type == "login" %>
+    - "desktop@<%= cluster %>"
+      <% else %>
+    #- "router@<%= cluster %>"
+    - "admin@<%= cluster %>"
+      <% end %>
+    - "-N"
+    - "OOD-<%= cluster %>-Desktop"
+    <% end %>
+

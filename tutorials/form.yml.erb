@@ -1,0 +1,54 @@
+# File modified by BEA.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+<%-
+  nnl_user = false
+  groups = OodSupport::Process.groups.map(&:name)
+  groups.each { |group|
+    if group.include? "nnl_users"
+        nnl_user = true
+    end
+  }
+-%>
+---
+title: "AI/Machine Learning Tutorial Series"
+subcategory: Tutorials
+description: "This is a self-guided tutorial for machine learning techniques on the INL HPC systems.  You can go through the entire series at once, or in parts.  Simply request the amount of time you think you might need for this session."
+attributes:
+<%- if nnl_user -%>
+  project: "nnl"
+<% else -%>      
+  project: "other"
+<%- end -%>
+  queue: "gpu"
+  modules: null
+  extra_jupyter_args: null
+  server_type: "lab"
+  notebook: "notebooks/ondemand/tutorials/tutorial_dashboard.ipynb"
+  cluster: null
+  tutorial: null
+      
+  bc_num_hours:
+    min: 1
+    max: 8
+    step: 1
+    value: 1
+    help: Min 1 | Max 8
+
+  continue_tutorial:
+    label: "Continue Tutorial"
+    widget: "check_box"
+    value: 1
+    help: "Start from where you left off or uncheck to start over."
+    cacheable: false
+
+form:
+  - project
+  - queue
+  - modules
+  - extra_jupyter_args
+  - server_type
+  - notebook
+  - cluster
+  - tutorial
+  - bc_num_hours
+  - continue_tutorial

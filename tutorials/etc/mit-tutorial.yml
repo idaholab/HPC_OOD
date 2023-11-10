@@ -1,0 +1,38 @@
+# File modified by BEA.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+---
+title: "MIT Symposium Summer 2021"
+subcategory: Tutorials
+description: "In this symposium, participants have an opportunity to explore together both machine learning (ML) techniques and nuclear science  and  engineering  in  an  interesting  theoretical  and  applied  forms.  You  will  learn  how  to  apply  most  popular  ML  methods to analyze real-world applications relevant to nuclear scientists and engineers in the areas of nuclear fission, fusion, security,  and  radiology  (Health  Physics).  You  will  use  ML  to  optimize  the  fuel  inside  nuclear  fission  reactors,  to  build  surrogate models to simulate nuclear fusion reactors, to control the MIT research reactor, and to detect viral pneumonia in patient lungs."
+
+attributes:
+  extra_jupyter_args: "tutorial_test1.ipynb"
+  notebook: 
+    label: Select a tutorial
+    help: |
+        Select which tutorial you would like to work on.
+    widget: select
+    options:
+      - [ "MIT Symposium Lab 1", "lab/tree/ondemand/mit-ml-S2021/lab1/lab1.ipynb"]
+      - [ "MIT Symposium Lab 2", "lab/tree/ondemand/mit-ml-S2021/lab2/lab2.ipynb"]
+      - [ "MIT Symposium Lab 3", "lab/tree/ondemand/mit-ml-S2021/lab3/lab3.ipynb"]
+      - [ "MIT Symposium Lab 4", "lab/tree/ondemand/mit-ml-S2021/lab4/lab4.ipynb"]
+      - [ "MIT Symposium Lab 5", "lab/tree/ondemand/mit-ml-S2021/lab5/lab5.ipynb"]
+      - [ "MIT Symposium Lab 6", "lab/tree/ondemand/mit-ml-S2021/lab6/lab6.ipynb"]
+      - [ "MIT Symposium Lab 7", "lab/tree/ondemand/mit-ml-S2021/lab7/lab7_ex1ex2.ipynb"]
+      - [ "MIT Symposium Lab 8", "lab/tree/ondemand/mit-ml-S2021/lab8/lab8.ipynb"]
+  server_type: "lab"
+  tutorial: 
+      widget: hidden_field
+      value: "mit-summer-2021"
+  cluster: "sawtoothpbs"
+  project: "edu_gen"
+
+  bc_num_hours:
+    min: 1
+    max: 9
+    step: 1
+    value: 1
+    help: Min 1 | Max 9
+
+submit: "submit/mit-submit.yml.erb"

@@ -1,0 +1,85 @@
+# File modified by BEA.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+<%-
+  groups = OodSupport::Process.groups.map(&:name)
+  # Sort the list so it's in order when people search through it
+  groups = groups.sort
+-%>
+---
+description: |
+    Copy research data to a Write-Once Read-Many (WORM) location.
+attributes:
+  cluster: "rdm"
+  bc_num_hours: 504
+  bc_num_slots: 1
+  project_code: "hpc"
+
+  description:
+    label: Description
+    widget: text_field
+    required: true
+    pattern: "[^\"']*"
+    help: |
+      Details describing the data and reason for backing up. Single- and double-quotes are not allowed. 
+
+  #embargo:
+  #  label: Embargo
+  #  widget: check_box
+  #  cacheable: false
+  #  help: This allows you to specify a date in which data will become publicly accessible. This only applies to the world readable location.
+
+  #embargo_date:
+  #  label: Embargo Date
+  #  widget: date_field
+  #  cacheable: false
+  #  help: Data will be made available on this date.
+
+  group_name:
+    label: Group Name
+    widget: select
+    cacheable: false
+    options:
+    <%- groups.each do |group| -%>
+      - ["<%= group %>", "<%= group %>"]
+    <%- end -%>
+    help: Specifying a group will copy the data to a write-once location with only this group having read access. 
+
+  location:
+    label: Destination Location
+    required: true
+    widget: radio
+    cacheable: false
+    options:
+      - ["World Readable Location Only", "world"]
+      - ["Group Readable Location Only", "group"]
+
+  requestor:
+    label: Requestor
+    widget: text_field
+    required: true
+    help: Individual requesting data transfer.
+
+  submission_directory:
+    label: Directory 
+    data-filepicker: true
+    data-target-file-type: dirs
+    data-filepicker-id: "directory_file_picker" 
+    required: true
+    pattern: "^/(home|projects|scratch)/.*"
+    help: | 
+        Full path to a directory containing data that will be copied to a group or publicly accessible location.
+        The directory and all subdirectories will be copied.
+
+form:
+  - cluster
+  - bc_num_hours
+  - bc_num_slots
+  - project_code
+  - submission_directory
+  - requestor
+  - description
+  - location
+  - group_name
+  #- embargo
+  #- embargo_date
+

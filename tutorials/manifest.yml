@@ -1,0 +1,9 @@
+# File modified by BEA.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+---
+name: Tutorials
+category: Training
+subcategory: Tutorials
+role: batch_connect
+description: |
+  This app will launch a tutorial series Jupyter Lab or Notebook server on one node.

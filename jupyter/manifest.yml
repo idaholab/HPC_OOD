@@ -1,0 +1,10 @@
+# File modified by BEA. Adds substantial capabilities to select different
+# environments/settings.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+---
+name: Jupyter
+category: Interactive Apps
+subcategory: Jupyter
+role: batch_connect
+description: |
+  This app will launch a Jupyter Lab or Notebook server on one node.

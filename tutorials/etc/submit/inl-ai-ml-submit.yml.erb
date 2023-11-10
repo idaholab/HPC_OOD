@@ -1,0 +1,13 @@
+# File modified by BEA.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+---
+script:
+  native:
+    - "-l"
+    - "select=1:ncpus=12:ngpus=1"
+    - "-P"
+    - <%= project %> 
+    - "-q"
+    - <%= queue %>@<%= cluster %>
+    - "-N"
+    - "OOD-AI-ML-Tutorial-Series-<%= cluster %>"

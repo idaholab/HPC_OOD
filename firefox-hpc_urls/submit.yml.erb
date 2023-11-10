@@ -1,0 +1,31 @@
+# File modified by BEA.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+---
+batch_connect:
+  template: "vnc"
+script:
+  native:
+    # Sawtooth
+    <% if cluster == "sawtoothpbs" %>
+    - "-l"
+    - "select=1:ncpus=1:mpiprocs=1"
+    - "-P"
+    - "<%= project %>"
+    - "-q"
+    - "router@sawtoothpbs"
+    - "-N"
+    - "OOD-Sawtooth_Firefox_VDI"
+    # Viz cluster
+    <% else %>
+    - "-N"
+    - "1"
+    - "-n"
+    - "1"
+    - "--mem=2G"
+    - "-A"
+    - "<%= project %>"
+    - "-p"
+    - "desktop_viz"
+    - "-J"
+    - "OOD-Viz_Firefox_VDI"
+    <% end %>

@@ -1,0 +1,115 @@
+# File modified by BEA. Adds substantial capabilities to select different
+#     desktop environments/settings.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+---
+description: "This app will launch a Linux Desktop in the HPC enclave."
+attributes:
+  form_type: 
+    widget: hidden_field
+    value: "desktop"
+  queue: null
+
+  # The widget is defined in the /etc file
+  cluster:
+    value: "sawtoothpbs"
+
+  project:
+    label: Project
+    help: |
+      This is the project argument provided to the job schedule. For a complete list of projects, go to [projects page] on hpcweb
+      [projects page]: http://hpcweb.hpc.inl.gov/home/pbs#specifying-a-project
+
+  job_type:
+    widget: select
+    options:
+      - ["Login", "login"]
+      - ["Compute - CPU", "cpu"]
+      - ["Compute - GPU", "gpu"]
+    help: | 
+      | Job Type    | Purpose                                |
+      |-------------|----------------------------------------|
+      | Login       | File editing, compiling, basic testing |
+      | Compute CPU | Tasks that may require more than 1 CPU |
+      | Compute GPU | Tasks that require GPU resources       |
+
+  bc_num_hours:
+    widget: "number_field"
+    label: Number of Hours
+    min: 1
+    step: 1
+    value: 1
+    max: 336
+    help: |  
+      *Warning* max walltime could be different between systems.  
+      Please see queues secton on the [cluster queues] for more information.
+      [cluster queues]: http://hpcweb.hpc.inl.gov/home/pbs#Queues  
+      | Cluster  | Max Hours |  
+      |----------|:---------:|  
+      | Lemhi     |    72     |  
+      | Sawtooth  |    168    |  
+
+  num_of_cpus:
+    widget: "number_field"
+    label: CPUs Requested
+    min: 1
+    max: 48
+    step: 1
+    value: 1
+    help: |
+      | Cluster  | Max Cores |
+      |----------|:-------:|
+      | Lemhi    | 40    |
+      | Sawtooth | 48    |
+
+  num_of_gpus:
+    widget: "number_field"
+    label: GPUs Requested
+    min: 0
+    max: 4
+    value: 1
+    help: |
+      Min 0 | Max 4. Requesting GPUs changes the amount of CPUs requested.
+
+  memory_requested: null
+
+  # Advanced Section
+  advanced:
+    label: Show advanced submission settings 
+    widget: check_box
+    help: | 
+      Use advanced settings to change default resources.
+
+  node_select:
+    label: Specify specific compute node
+    widget: text_field
+    #cacheable: true
+    help: | 
+      Request a specific compute node to run your desktop session. Sawtooth nodes will be in the format 'r*i*n*', and lemhi will be 'lemhi0###'
+    pattern: "r[1-8]i[0-7]n[0-9]?|lemhi0[0-5][0-9][0-9]"
+
+  gpu_list: null
+  num_of_nodes: 1
+  desktop:
+    value: "xfce"
+    cacheable: false
+  bc_vnc_idle: 0
+  bc_vnc_resolution:
+    required: true
+
+form:
+  - form_type
+  - queue
+  - project
+  - cluster
+  - job_type
+  - bc_num_hours
+  - num_of_cpus
+  - num_of_gpus
+  - memory_requested
+  - num_of_nodes
+  - advanced
+  - gpu_list
+  - node_select
+  - desktop
+  - bc_vnc_idle
+  - bc_vnc_resolution

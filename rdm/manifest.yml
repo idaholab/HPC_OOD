@@ -1,0 +1,9 @@
+# File modified by BEA.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+---
+name: Research Data Management
+category: Interactive Apps
+subcategory: RDM
+role: batch_connect
+description: |
+    Clone data into a Write-Once Mead-Many (WORM) location for others to access.

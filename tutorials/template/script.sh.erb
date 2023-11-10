@@ -1,0 +1,113 @@
+#!/usr/bin/env bash
+# File modified by BEA.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+
+# Benchmark info
+echo "TIMING - Starting main script at: $(date) on system: $(hostname)"
+
+# Get the full path of the notebook as well the parent path
+NOTEBOOK_PATH=<%= context.notebook %>
+NOTEBOOK=$(basename ${NOTEBOOK_PATH})
+#MOUNTS="-B /scratch -B /apps -B /hpc-common -B /projects -B /tmp"
+MOUNTS="-B /apps -B /hpc-common -B /projects -B /tmp"
+
+copy_notebook_files(){
+    # $1 - path to notebook in the /apps space
+    # $2 - path to notebook in the user's home directory
+    # $3 - string "directory" or string "file"
+    TUTORIAL_PATH="$1"
+    NOTEBOOK_PATH="$2"
+    TYPE="$3"
+    CONTINUE=false
+
+    # Continue the tutorial or start from scratch
+    <% if context.continue_tutorial == "1" %>
+    CONTINUE=true
+    <% end %>
+  
+    # If the notebook does not exist OR the user doesn't want to continue their tutorial,
+    # copy the tutorial for a fresh start
+    if [[ ! -f ${NOTEBOOK_PATH} ]] || [[ ${CONTINUE} == false ]]; then 
+        if [ ${TYPE} == "directory" ]; then
+            # strip off "filename.ipynb" and just get the dirname. 
+            cp -rf ${TUTORIAL_PATH%/*.ipynb}/* ${NOTEBOOK_PATH%/*.ipynb}
+        else
+            cp -f ${TUTORIAL_PATH} ${NOTEBOOK_PATH} 
+        fi
+    fi
+}
+
+# Set working directory to home directory
+cd "${HOME}"
+
+CONTAINER="/hpc-common/users/containers/singularity/ml-ai/sifs/inl/tutorials_extras.sif"
+# Check what tutorial series the user is running
+<% if context.tutorial == "mit-summer-2021" %>
+  app_tutorials=/apps/tutorials/mit-ml-S2021
+  mit_tutorials=~/ondemand/mit-ml-S2021
+
+  # Get the lab from the notebook
+  mit_lab=${NOTEBOOK%.*}
+
+  # If lab7 then account for longer name (_ex1ex2)
+  if [[ "${mit_lab}" =~ "lab7" ]]; then
+      mit_lab=${mit_lab%_*}
+  fi
+
+  # Make the tutorials directory
+  mkdir -p ${mit_tutorials}/${mit_lab}
+
+  # Symlink the data for tutorials into the user's home directory
+  ln -sf ${app_tutorials}/data ${mit_tutorials}
+
+  # Perform a copy of the lab if necessary
+  copy_notebook_files ${app_tutorials}/${mit_lab}/${NOTEBOOK} ${mit_tutorials}/${mit_lab}/${NOTEBOOK} "directory"
+
+<% elsif context.tutorial == "inl-tutorials" %>
+  app_tutorials=/apps/tutorials/inl-ai-ml-tutorials
+  inl_tutorials=~/ondemand/inl-ai-ml/tutorials
+  datasets=~/.keras/datasets
+
+  # Copy the tutorial files to their home directory
+  mkdir -p $inl_tutorials
+  mkdir -p $datasets
+
+  # Symlink the datasets into the users dataset directory
+  ln -sf ${app_tutorials}/datasets/* ${datasets}
+
+  # Symlink the tutorial images into the users ondemand directory
+  ln -sf ${app_tutorials}/images/ ~/ondemand/inl-ai-ml/images
+
+  # Symlink additional material
+  ln -sf ${app_tutorials}/checkpoints/ ~/ondemand/inl-ai-ml/checkpoints
+
+  # Perform a copy of the notebook if necessary
+  copy_notebook_files ${app_tutorials}/jupyter_notebooks/${NOTEBOOK} ${inl_tutorials}/${NOTEBOOK} "file"
+<% end %>
+
+# Make sure modules have been sourced
+. /etc/profile.d/modules.sh
+
+# Purge the module environment to avoid conflicts
+module purge
+
+# Load the required modules
+<% if ! context.modules.blank? %>
+module load <%= context.modules %>
+<% end %>
+
+module load singularity
+
+# List loaded modules
+module list
+
+# Benchmark info
+echo "TIMING - Starting jupyter at: $(date)"
+
+set -x
+
+# Launch the Jupyter Server
+<% if context.notebook.include? "intro_to_reinforcement_learning.ipynb" %>
+CONTAINER="/hpc-common/users/containers/singularity/ml-ai/sifs/inl/rl_extras.sif"
+<% end %>
+singularity exec --nv $MOUNTS $CONTAINER jupyter <%= context.server_type %> --config="${CONFIG_FILE}"

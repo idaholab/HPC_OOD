@@ -1,0 +1,13 @@
+# File modified by BEA.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+---
+script:
+  native:
+    - "-l"
+    - "select=1:ncpus=1"
+    - "-P"
+    - <%= project_code %>
+    - "-q"
+    - "general@rdm"
+    - "-N"
+    - "OOD-rdm_rdm"

@@ -1,0 +1,71 @@
+# File modified by BEA. Adds substantial capabilities to select different
+#     environments/settings.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+---
+script:
+  native:
+    # Sawtooth V100 config - PBS
+    <% if cluster == "sawtoothpbs" %>
+    - "-l"
+      <% if num_of_gpus.to_i == 0 %>
+    - "select=<%= num_of_nodes.to_i %>:ncpus=<%= num_of_cpus.to_i %>:ngpus=0:mpiprocs=<%= num_of_cpus.to_i %>"
+    - "-q"
+    - "router@<%= cluster %>"
+      <% elsif num_of_gpus.to_i > 4 %>
+    - "select=<%= num_of_nodes.to_i %>:ncpus=48:ngpus=4"
+    - "-q"
+    - "gpu@<%= cluster %>"
+      <% else %>
+    - "select=<%= num_of_nodes.to_i %>:ncpus=<%= num_of_gpus.to_i*12 %>:ngpus=<%= num_of_gpus.to_i %>:mpiprocs=<%= num_of_gpus.to_i*12 %>"
+    - "-q"
+    - "gpu@<%= cluster %>"
+      <% end %>
+    - "-P"
+    - "<%= project %>" 
+    - "-N"
+    - "OOD-<%= cluster %>-Jupyter"
+
+    # Hoodoo A100 config - SLURM
+    <% elsif cluster == "hoodoo" %>
+    - "-N"
+    - "<%= num_of_nodes.to_i %>"
+    - "-n"
+    - "<%= num_of_gpus.to_i * 16 %>"
+      # Number of GPUs times CPUs * (Total MEM / Total CPUs) - (500 / 64)
+    - "--mem=<%= (num_of_gpus.to_i * 16 * 7.8125).to_i %>G"
+    - "--gres=gpu:<%= num_of_gpus.to_i %>"
+    - "-A"
+    - "<%= project %>" 
+    - "-J"
+    - "OOD-<%= cluster %>-Jupyter"
+
+    # Lemhi config - PBS
+    <% elsif cluster == "lemhipbs" %>
+    - "-l"
+      <% if num_of_cpus.to_i > 40 %>
+    - "select=1:ncpus=40:mpiprocs=40"
+      <% else %>
+    - "select=<%= num_of_nodes.to_i %>:ncpus=<%= num_of_cpus.to_i %>:mpiprocs=<%= num_of_cpus.to_i %>"
+      <% end %>
+    - "-P"
+    - "<%= project %>" 
+    - "-q"
+    - "router@<%= cluster %>"
+    - "-N"
+    - "OOD-<%= cluster %>-Jupyter"
+
+    <% else %>
+    - "-l"
+      <% if num_of_cpus.to_i > 36 %>
+    - "select=1:ncpus=36:mpiprocs=36"
+      <% else %>
+    - "select=<%= num_of_nodes.to_i %>:ncpus=<%= num_of_cpus.to_i %>:mpiprocs=<%= num_of_cpus.to_i %>"
+      <% end %>
+    - "-P"
+    - "<%= project %>" 
+    - "-q"
+    - "general@<%= cluster %>"
+    - "-N"
+    - "OOD-<%= cluster %>-Jupyter"
+
+    <% end %>

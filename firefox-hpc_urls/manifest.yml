@@ -1,0 +1,14 @@
+# File modified by BEA.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+---
+name: HPC URLs (hpcgitlab, hpc training, hpc website)
+category: Interactive Apps
+subcategory: Firefox
+role: batch_connect
+description: |
+  This will start a session with Firefox to allow access to HPC websites, such as:  
+
+  * HPC GitLab (https://hpcgitlab.hpc.inl.gov)
+  * HPC Website (http://hpcweb.hpc.inl.gov)
+  * HPC Ticketing system (https://hpcweb.hpc.inl.gov/rt)
+  * HPC Training Resources (http://hpcweb.hpc.inl.gov/trainingvideos)

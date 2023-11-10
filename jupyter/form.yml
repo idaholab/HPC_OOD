@@ -1,0 +1,148 @@
+# File modified by BEA. Adds substantial capabilities to select different
+#     environments/settings.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+
+---
+description: "This app will launch a Jupyter Lab or Notebook server."
+attributes:
+  cluster:
+    value: "sawtoothpbs"
+
+  project:
+    label: Project
+    help: |
+      This is the project argument provided to the job scheduler. Example: *moose, neams*. For a complete list of projects, go to [projects page] on hpcweb
+      [projects page]: http://ondemand-dev.hpc.inl.gov/hpcweb/home/pbs#specifying-a-project
+
+  num_of_gpus:
+    label: GPUs Requested
+    widget: "number_field"
+    min: 0
+    max: 4
+    value: 1
+    help: Min 1 | Max 4. Requesting GPUs changes the amount of CPUs requested.
+
+  num_of_cpus:
+    label: CPUs Requested
+    widget: "number_field"
+    min: 1
+    max: 48
+    step: 1
+    value: 1
+    help: |
+      | Cluster  | Max Cores |
+      |----------|:-------:|
+      | Lemhi    | 40    |
+      | Sawtooth | 48    |
+
+  bc_num_hours:
+    label: Number of Hours
+    widget: "number_field"
+    min: 1
+    max: 336
+    step: 1
+    value: 1
+    help: |  
+      *Warning* max walltime could be different between systems.  
+      Please see queues secton on the [cluster queues] for more information.
+      [cluster queues]: http://ondemand-dev.hpc.inl.gov/hpcweb/home/pbs#Queues  
+      | Backend  | Max Hours |  
+      |----------|:---------:|  
+      | CPU - Lemhi     |    72     |  
+      | CPU - Sawtooth  |    168    |  
+      | GPU - Sawtooth  |    168    |  
+      | GPU - Hoodoo    |    168    |  
+
+  container_checkbox:
+    label: Select a container-based Jupyter Kernel
+    help: This option will prevent you from switching kernels unless a new session is created.
+    widget: check_box
+    cacheable: false
+
+  container:
+    label: Select Jupyter Kernel
+    widget: select
+    options:
+        - ["RAPIDS 22.04 Tensorflow 2.8", "/hpc-common/users/containers/singularity/ml-ai/sifs/nvidia/nvidia_rapids_22.04_tf_2.8.sif"]
+        - ["RAPIDS 22.04 Pytorch 1.12", "/hpc-common/users/containers/singularity/ml-ai/sifs/nvidia/nvidia_rapids_22.04_pytorch_1.12.sif"]
+
+  custom_container:
+    label: Use a custom container
+    pattern: \/(home|projects|scratch)[\/]+[A-Za-z0-9]+[A-Za-z0-9_\-\/]*
+    data-filepicker: true
+    data-target-file-type: files
+    data-target-file-pattern: \.sif$
+    help: |
+      If the above container list does not have the container that you want to run, provide the full path to the .sif file here. If the path is incorrect, your job will fail.
+    cacheable: false
+
+# Advanced Section
+  advanced:
+    label: Use advanced submission settings 
+    widget: check_box
+    help: | 
+      Use advanced settings to change your Jupyter server type, number of nodes for your job, or enter project information.
+
+  server_type:
+    label: Jupyter server type
+    widget: select
+    options:
+      - ["Lab", "lab"]
+      - ["Notebook", "notebook"]
+    value: "lab"
+    help: |
+      Launch the [Jupyter] session with the [Lab] or [Notebook] interface.
+      [Jupyter]: https://jupyter.org
+      [Lab]: https://jupyterlab.readthedocs.io/en/stable/
+      [Notebook]: https://jupyter-notebook.readthedocs.io/en/stable/
+
+  working_directory:
+    label: Jupyter Working Directory
+    widget: text_field
+    pattern: \/(home|projects|scratch)[\/]+[A-Za-z0-9]+[A-Za-z0-9_\-\/]*
+    help: |
+      Enter the directory the Jupyter session will start in
+
+      - For example, if you want to start the session in /projects/hpc_test/ enter **/projects/hpc_test**
+
+  module_path:
+    label: Additional Modulefile Paths
+    widget: text_field
+    pattern: (\/(home|projects|scratch)[\/]+[A-Za-z0-9]+[A-Za-z0-9_\-\/]*(\s)*)+
+    help: |
+      List the directory that contains the modulefiles folder. Multiple directories can be listed (space separated).
+
+      - For example, if the directory was /projects/hpc_test/modulefiles enter **/projects/hpc_test**
+
+  modules:
+    help: |
+      List the module to be loaded. Multiple modules can be listed (space separated). If left blank, the default system python3 will be loaded.
+
+      - If using a shared project, these modules are loaded from /projects/\<project_name\>/modulefiles and can be used in conjunction with system modules.
+      - If not using a shared project, these are the system modules.
+        - For example, on Sawtooth, or Lemhi to use python3 enter *python/3.7-anaconda-2019.10*
+
+      **NOTE:** If you need to install packages via pip or conda, please do so from the login nodes for each cluster.
+    value: ""
+
+  # Any extra command line arguments to feed to the `jupyter notebook ...`
+  # command that launches the Jupyter notebook within the batch job
+  extra_jupyter_args: ""
+  num_of_nodes: 1
+
+form:
+  - project
+  - cluster
+  - num_of_gpus
+  - num_of_cpus
+  - num_of_nodes
+  - bc_num_hours
+  - container_checkbox
+  - container
+  - custom_container
+  - advanced
+  - server_type
+  - working_directory
+  - module_path
+  - modules
+  - extra_jupyter_args

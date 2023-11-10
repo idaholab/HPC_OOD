@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+# File modified by BEA. Adds substantial capabilities to select different
+#     environments/settings.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+
+# Benchmark info
+echo "TIMING - Starting main script at: $(date)"
+
+# Set working directory to home directory
+echo <%= context.working_directory %>
+cd "${HOME}"
+<%- if ! context.working_directory.blank? -%>
+cd <%= context.working_directory %>
+<%- end -%>
+
+#
+# Start Jupyter Notebook Server
+#
+
+# Make sure modules have been sourced
+. /etc/profile.d/modules.sh
+
+# Purge the module environment to avoid conflicts
+module purge
+
+<%- if ! context.module_path.blank? -%>
+  <% context.module_path.split(" ").each do |val| %>
+    # Modify the MODULEPATH to use project based module files
+    module use <%= val %>/modulefiles
+  <% end %>
+<%- end -%>
+
+# Load the require modules
+# Custom Modules
+<% if ! context.modules.blank? %>
+module load <%= context.modules %>
+
+# Cluster default modules
+<% elsif context.cluster == "sawtoothpbs" %>
+module load python/3.10-mambaforge-2023-10-21
+
+<% elsif context.cluster == "hoodoo" %>
+module load python/3.7-anaconda-2020.11
+
+<% elsif context.cluster == "lemhipbs" %>
+module load python/3.9-mambaforge
+
+<% else %>
+# Load the require modules
+module load python/3.7-anaconda-2019.10
+<% end %>
+
+# List loaded modules
+module list
+
+# Benchmark info
+echo "TIMING - Starting jupyter at: $(date)"
+
+set -x
+
+# Launch the Tensorboard Server
+# start on 127.0.0.1, since TensorBoard doesn't support any kind of authentication
+# and we rely on authrevproxy to only allow authentified requests
+#tensorboard --logdir=~/projects/tensorboard/logs \
+#            --host=127.0.0.1 \
+#            --port="${app_port}" &
+
+# Launch the Jupyter Server
+#jupyter <%= context.server_type %> --config="${CONFIG_FILE}" <%= context.extra_jupyter_args %>
+<% if context.container_checkbox == "1" %>
+  module load apptainer
+  SINGULARITY_MOUNTS="-B /scratch -B /hpc-common -B /projects -B /tmp:/tmp"
+
+  <% if ! context.custom_container.blank? %>
+    SINGULARITY_IMAGE="<%= context.custom_container %>"
+  <% else %>
+    SINGULARITY_IMAGE="<%= context.container %>"
+  <% end %>
+  singularity exec --nv $SINGULARITY_MOUNTS $SINGULARITY_IMAGE \
+  jupyter <%= context.server_type %> --config="${CONFIG_FILE}" <%= context.extra_jupyter_args %>
+
+<% else %>
+  jupyter <%= context.server_type %> --config="${CONFIG_FILE}" <%= context.extra_jupyter_args %>
+<% end %>

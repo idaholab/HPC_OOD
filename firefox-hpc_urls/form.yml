@@ -1,0 +1,33 @@
+# File modified by BEA.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+---
+cluster: "hoodoo"
+attributes:
+  project: "accounts"
+
+  bc_num_hours:
+    min: 1
+    max: 12
+    step: 1
+    value: 1
+    help: Min 1 | Max 12
+
+  bc_vnc_resolution:
+    required: true
+
+  urls:
+    label: URL Options
+    widget: select
+    options:
+      - ["HPC GitLab", "hpc_gitlab"]
+      - ["HPC Ticketing System", "hpc_ticketing_system"]
+      - ["HPC Training Resources", "hpc_training_resources"]
+      - ["HPC Website", "hpc_website"]
+
+form:
+  - urls
+  - project
+  - bc_num_hours
+  - bc_vnc_resolution
+  - bc_email_on_started
+

@@ -1,0 +1,29 @@
+# File modified by BEA. Adds substantial capabilities to select different
+#     desktop environments/settings.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+---
+title: "Linux Desktop"
+description: |
+  This app will launch a linux desktop on an INL HPC resource. 
+
+attributes:
+  form_type:
+    widget: hidden_field
+    value: "desktop"
+  queue: 
+    widget: hidden_field
+    value: "desktop"
+  desktop: 
+    widget: hidden_field
+    value: "xfce"
+
+  cluster:
+    label: Cluster
+    widget: select
+    options:
+      - ["Lemhi", "lemhipbs"]
+      - ["Sawtooth", "sawtoothpbs"]
+    value: "sawtoothpbs"
+    help: Select what cluster you want to run your desktop on.
+
+submit: "submit/desktop_submit.yml.erb"

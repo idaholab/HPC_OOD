@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# File modified by BEA.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+
+echo -n "Sending message..."
+<% if context.location == "group" %>
+/opt/rdm/bin/send_message -message "{ \"message_sender\": \"${USER}\", \"src\": \"<%= context.submission_directory %>\", \"dest\": \"<%= context.location %>/<%= context.group_name %>\", \"cwd\": \"$(pwd)\", \"requestor\": \"<%= context.requestor %>\", \"description\": \"<%= context.description %>\" }" -interfaceName eth0 &> /dev/null
+<% else %>
+/opt/rdm/bin/send_message -message "{ \"message_sender\": \"${USER}\", \"src\": \"<%= context.submission_directory %>\", \"dest\": \"<%= context.location %>\", \"cwd\": \"$(pwd)\", \"requestor\": \"<%= context.requestor %>\", \"description\": \"<%= context.description %>\" }" -interfaceName eth0 &> /dev/null
+<% end %>
+
+RETURN_CODE=$?
+if (( RETURN_CODE != 0 )); then
+    echo "ERROR"
+    echo "Could not send message and received RETURN CODE: ${RETURN_CODE}"
+    echo "Please email hpcsupport@inl.gov if you continue seeing this error message and make sure to include the Session ID of this job."
+else
+    echo "DONE"
+fi
+
+echo -n "Waiting for data to copy..."
+echo "DONE"

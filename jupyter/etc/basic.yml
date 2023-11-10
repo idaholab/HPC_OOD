@@ -1,0 +1,20 @@
+# File modified by BEA. Adds substantial capabilities to select different
+#     environments/settings.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+---
+title: "Jupyter"
+
+attributes:
+  cluster:
+    label: Jupyter Backend
+    help: Select what type of computational hardware you'd like to have attached to your Jupyter session.
+    widget: select
+    options:
+      - ["CPU - Lemhi", "lemhipbs"]
+      - ["CPU - Sawtooth", "sawtoothpbs"]
+      - ["GPU - Sawtooth", "sawtoothpbs"]
+      - ["GPU - Hoodoo", "hoodoo"]
+    value: "lemhipbs"
+
+submit: "submit/basic_submit.yml.erb"
+

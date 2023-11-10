@@ -1,0 +1,67 @@
+# File modified by BEA. Adds substantial capabilities to select different
+#     desktop environments/settings.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+---
+title: "Linux Desktop with Visualization"
+description: |
+  This app will launch an interactive desktop on a visualization node.
+
+  This is meant for all types of tasks such as:
+
+  - accessing & viewing files
+  - compiling code
+  - debugging
+  - running visualization software **with** 3D hardware support
+
+attributes:
+  advanced: null
+  job_type: null
+  node_select: null
+  num_of_cpus: null
+
+  form_type:
+    widget: hidden_field
+    value: "visualization"
+
+  queue: 
+    widget: hidden_field
+    value: "desktop_viz"
+
+  cluster:
+    label: Cluster
+    widget: select
+    options:
+      - ["Sawtooth", "sawtoothpbs"]
+      - ["Viz", "hoodoo"]
+
+  num_of_gpus:
+    label: GPUs Requested
+    widget: number_field
+    min: 1
+    max: 2
+    value: 1
+    help: Min 1 | Max 2
+
+  bc_num_hours:
+    max: 72
+    help: |
+      *Warning* max walltime could be different between systems.
+      Please see queues secton on the [cluster queues] for more information.
+      [cluster queues]: http://hpcweb.hpc.inl.gov/home/pbs#Queues
+      | Cluster  | Max Hours |
+      |----------|:---------:|
+      | Sawtooth |    12     |
+      | Viz      |    72     |
+
+  memory_requested:
+    label: Requested Memory
+    widget: select
+    options:
+      - [ "371 GB", "371gb" ]
+      - [ "742 GB", "742gb" ]
+
+  gpu_list: null
+  desktop: "xfce"
+
+submit: "submit/desktop-visualization_submit.yml.erb"
+

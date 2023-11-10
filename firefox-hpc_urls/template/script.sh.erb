@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# File modified by BEA
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+
+# Clean the environment
+module purge
+
+# Set working directory to home directory
+cd "${HOME}"
+
+#
+# Launch Xfce Window Manager and Panel
+#
+
+(
+  module restore
+  export XDG_CONFIG_HOME="<%= session.staged_root.join("config") %>"
+  export XDG_DATA_HOME="<%= session.staged_root.join("share") %>"
+  export XDG_CACHE_HOME="$(mktemp -d)"
+  xfwm4 --compositor=off --daemon --sm-client-disable
+  xsetroot -solid "#D3D3D3"
+  xfsettingsd --sm-client-disable
+  xfce4-panel --sm-client-disable
+) &
+
+# Restore the module environment to avoid conflicts
+module restore
+
+#
+# Start Firefox
+#
+set -x
+if [ "<%= context.urls %>" == "hpc_gitlab" ]; then
+    firefox --new-window https://hpcgitlab.hpc.inl.gov --fullscreen
+elif [ "<%= context.urls %>" == "hpc_website" ]; then
+    firefox --new-window http://hpcweb.hpc.inl.gov --fullscreen
+elif [ "<%= context.urls %>" == "hpc_ticketing_system" ]; then
+    firefox --new-window https://hpcweb.hpc.inl.gov/rt --fullscreen
+elif [ "<%= context.urls %>" == "hpc_training_resources" ]; then
+    firefox --new-window http://hpcweb.hpc.inl.gov/trainingvideos --fullscreen
+else
+    firefox --fullscreen
+fi
