@@ -1,0 +1,9 @@
+# File modified by BEA
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+---
+name: Training
+category: Training
+subcategory: Videos
+role: batch_connect
+description: AI/ML Training Videos
+

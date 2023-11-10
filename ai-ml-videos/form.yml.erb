@@ -1,0 +1,56 @@
+# File modified by BEA. Adds substantial capabilities to display videos
+#      on the interactive apps page while hiding all of the submission elements.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+
+<%-
+    ai_ml_2021 = "/var/www/ood/apps/sys/dashboard/public/video_training/ai_ml_symposium2021/"
+    
+    ai_ml_2022 = "/var/www/ood/apps/sys/dashboard/public/video_training/ai_ml_symposium2022/"
+
+    ai_ml_2021_videos = Array.new
+    ai_ml_2022_videos = Array.new
+
+    # AI ML Symposium 2021 
+    files = Dir.entries(ai_ml_2021).sort
+    files.each { |file|
+        if file.include? ".mp4"
+            ai_ml_2021_videos.push(file)
+        end
+    }
+    
+    # AI ML Symposium 2022
+    files = Dir.entries(ai_ml_2022).sort
+    files.each { |file|
+        if file.include? ".mp4"
+            ai_ml_2022_videos.push(file)
+        end
+    }
+-%>
+---
+title: "AI/ML Training Videos"
+description: "AI/ML Training series videos."
+cluster: null
+attributes:
+  ai_ml_video_2021_list: 
+    label: "AI/ML Symposium 2021"
+    widget: select
+    options:
+    <%- ai_ml_2021_videos.each do |video| -%>
+      - ["<%= video.gsub!(/_/, ' ').gsub!(/.mp4/, ' ') %>", "/pun/sys/dashboard/video_training/ai_ml_symposium2021/<%= video %>"]
+    <%- end -%>
+  ai_ml_video_2022_list: 
+    label: "AI/ML Symposium 2022"
+    widget: select
+    options:
+    <%- ai_ml_2022_videos.each do |video| -%>
+      - ["<%= video.gsub!(/_/, ' ').gsub!(/.mp4/, ' ') %>", "/pun/sys/dashboard/video_training/ai_ml_symposium2022/<%= video %>"]
+    <%- end -%>
+
+  video:
+    widget: hidden_field
+
+form:
+  - ai_ml_video_2021_list
+  - ai_ml_video_2022_list
+  - video
+
