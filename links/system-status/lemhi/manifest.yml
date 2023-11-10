@@ -1,0 +1,7 @@
+# File modified by BEA.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+---
+name: Lemhi
+category: Clusters
+subcategory: Status
+url: https://hpcondemand.hpc.inl.gov/hpcweb/status/lemhi/jobs

@@ -1,0 +1,7 @@
+# File modified by BEA.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+---
+name: Hoodoo
+category: Clusters
+subcategory: Status
+url: https://hpcondemand.inl.gov/hpcweb/status/hoodoo/jobs
