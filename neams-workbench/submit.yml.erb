@@ -1,0 +1,17 @@
+# File modified by BEA.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+
+---
+batch_connect:
+  template: "vnc"
+script:
+  native:
+    - "-l"
+    - "select=1:ncpus=<%= num_of_cpus.to_i %>:mpiprocs=<%= num_of_cpus.to_i %>"
+    - "-P"
+    - <%= project %>
+    - "-q"
+    - "<%= queue %>@sawtoothpbs"
+    - "-N"
+    - "<%= job_name %>"
+

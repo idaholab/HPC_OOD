@@ -1,0 +1,79 @@
+# File modified by BEA.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+
+<%-
+  groups = OodSupport::Process.groups.map(&:name)
+  training_group = "hpcadmin"
+-%>
+---
+description: "This app will launch a Linux Desktop in the HPC enclave with NEAMS workbench already started."
+
+attributes:
+  cluster: "sawtoothpbs"
+  desktop: "xfce"
+  bc_vnc_idle: 0
+  bc_vnc_resolution:
+    required: true
+
+<%- if groups.include? training_group -%>
+  job_name: "OOD-sawtooth_neams_workbench_training"
+  queue: "router"
+  project: "nrc"
+  bc_num_hours: 
+    cacheable: false
+    value: 10
+  num_of_cpus: 4
+  version: "neams-workbench-5.3.2"
+
+<% else -%>
+  job_name: "OOD-sawtooth_neams_workbench"
+  queue: "router"
+  project:
+    label: Project
+    help: |
+      This is the project argument provided to the job schedule. For a complete list of projects, go to [projects page] on hpcweb
+      [projects page]: http://hpcweb.hpcondemand.inl.gov/home/pbs#specifying-a-project
+    cacheable: false
+    required: true
+  
+  bc_num_hours:
+    widget: "number_field"
+    label: Number of Hours
+    min: 1
+    step: 1
+    max: 168
+    cacheable: false
+    value: 1
+
+  num_of_cpus:
+    widget: "number_field"
+    label: Cores 
+    min: 1
+    max: 48
+    step: 1
+    cacheable: false
+    value: 1
+  version:
+    label: Version of NEAMS Workbench
+    widget: select
+    cacheable: false
+    options:
+        - ["neams-workbench-5.3.2", "neams-workbench-5.3.2"]
+        - ["neams-workbench-5.3.1", "neams-workbench-5.3.1"]
+        - ["neams-workbench-5.2.0", "neams-workbench-5.2.0"]
+        - ["neams-workbench-4.1.2", "neams-workbench-4.1.2"]
+        - ["neams-workbench-5.1.2", "neams-workbench-5.1.2"]
+<%- end -%>
+
+form:
+  - cluster
+  - desktop
+  - bc_vnc_idle
+  - bc_vnc_resolution
+  - job_name
+  - queue
+  - project
+  - bc_num_hours
+  - num_of_cpus
+  - version
+

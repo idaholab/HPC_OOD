@@ -1,0 +1,11 @@
+# File modified by BEA.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+
+---
+name: NEAMS Workbench
+category: NCRC
+subcategory: GUIs
+role: batch_connect
+description: |
+  This will start a session gui session of NEAMS Workbench.  
+
