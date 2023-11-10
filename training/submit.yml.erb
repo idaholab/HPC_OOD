@@ -1,0 +1,15 @@
+# File modified by BEA.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+---
+batch_connect:
+  template: "vnc"
+script:
+  native:
+    - "-l"
+    - "select=1:ncpus=8:mpiprocs=8"
+    - "-P"
+    - "<%= project %>"
+    - "-q"
+    - "R5745285@sawtoothpbs"
+    - "-N"
+    - "OOD-Sawtooth_BISON_Training"

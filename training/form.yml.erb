@@ -1,0 +1,43 @@
+# File modified by BEA.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+<%-
+  groups = OodSupport::Process.groups.map(&:name)
+  training_group = "training"
+-%>
+---
+cluster: "sawtooth"
+<%- if groups.include? training_group -%>
+description: This will start an interactive desktop session.
+attributes:
+  group_training: 
+    widget: "hidden_field"
+    cacheable: false
+    value: true
+  desktop: "xfce"
+  project: "accounts"
+  queue: "training"
+  bc_num_hours: 36
+  bc_vnc_resolution:
+    required: true
+
+form:
+  - group_training
+  - desktop
+  - project
+  - bc_num_hours
+  - bc_vnc_resolution
+
+  <% else -%>
+description: |
+  According to our records, you are not enrolled in this training. 
+  If you believe that is a mistake, please email us at hpcsupport@inl.gov.
+attributes:
+  group_training: 
+    widget: "hidden_field"
+    cacheable: false
+    value: false
+
+form:
+  - group_training
+
+<%- end -%>

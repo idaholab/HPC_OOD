@@ -1,0 +1,9 @@
+# File modified by BEA.
+# Copyright 2023, Battelle Energy Alliance, LLC All Rights Reserved
+---
+name: BISON Training
+category: Training
+subcategory: Training Sessions
+role: batch_connect
+description: |
+  This will start an interactive desktop session.
